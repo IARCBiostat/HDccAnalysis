@@ -59,18 +59,13 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span></span>
-<span>  collapse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  comment <span class="op">=</span> <span class="st">"#&gt;"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="generate-survival-data-with-a-constant-baseline-hazard">Generate survival data with a constant baseline hazard<a class="anchor" aria-label="anchor" href="#generate-survival-data-with-a-constant-baseline-hazard"></a>
 </h2>
 <p>We simulate 100 participants, all entering at age 50 and
 administratively censored at age 70. The baseline hazard is constant at
 0.005, with a two covariates and log-hazard ratio 0.5.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
 <span><span class="va">entry_age</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
@@ -101,7 +96,7 @@ administratively censored at age 70. The baseline hazard is constant at
 <div class="section level3">
 <h3 id="quick-checks">Quick checks<a class="anchor" aria-label="anchor" href="#quick-checks"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">entry_age</span>, <span class="va">censor_age</span>,<span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">Exp1</span> <span class="op">+</span> <span class="va">Exp2</span>, data <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
 <span><span class="co"># Call:</span></span>
@@ -116,7 +111,7 @@ administratively censored at age 70. The baseline hazard is constant at
 <span><span class="co"># n= 1000, number of events= 207 </span></span></code></pre></div>
 <p>The achieved incidence rate is stored as an attribute (events /
 person-time):</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span></span>
 <span><span class="co"># [1] 0.01163777</span></span></code></pre></div>
 </div>
@@ -127,7 +122,7 @@ person-time):</p>
 <code>target_avg_baseline_hazard</code> to obtain a required incidence
 rate. This feature is mainly used when you wish to vary beta but adjust
 teh baseline hazard to maintain the incidence rate:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>

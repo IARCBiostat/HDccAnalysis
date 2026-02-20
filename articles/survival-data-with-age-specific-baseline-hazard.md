@@ -1,12 +1,5 @@
 # Survival data with age-specific baseline hazard
 
-``` r
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 ## Generate survival data with a piecewise baseline hazard
 
 We simulate 1000 participants entering at age 50 and administratively

@@ -1,12 +1,5 @@
 # Survival data with a constant baseline hazard
 
-``` r
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
-
 ## Generate survival data with a constant baseline hazard
 
 We simulate 100 participants, all entering at age 50 and
