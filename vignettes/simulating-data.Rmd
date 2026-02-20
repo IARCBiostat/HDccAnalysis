@@ -1,0 +1,24 @@
+---
+title: "Simulating data"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Simulating data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```r
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Here we provide vignettes for different ways for generating survival data using [HDccAnalysis::sim_cox_age_data()](reference/sim_cox_age_data.html):
+
+- [Survival data with a constant baseline hazard](articles/Survival-data-with-a-constant-baseline-hazard.html)
+
+
+

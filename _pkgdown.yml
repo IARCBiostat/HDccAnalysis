@@ -1,0 +1,24 @@
+url: https://IARCBiostat.github.io/HDccAnalysis
+template:
+  bootstrap: 5
+
+destination: docs
+
+home:
+  title: HDccAnalysis
+  tagline: High-Dimensional Case-Cohort Analysis tools
+  strip_header: true
+
+reference:
+  - title: Simulation
+    contents:
+      - sim_cox_age_data
+  - title: All functions
+    contents:
+      - starts_with("")
+
+articles:
+  - title: Vignettes
+    contents:
+      - simulating-data
+      - survival-data-with-a-constant-baseline-hazard

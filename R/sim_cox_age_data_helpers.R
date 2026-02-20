@@ -410,15 +410,15 @@
 #' under an attained-age baseline hazard that is piecewise constant over
 #' age bands. The subject-specific hazard is
 #' \deqn{
-#'   \lambda(a) = \lambda_0(a) \exp(\eta),
+#'   h(a) = h_0(a) \exp(\eta),
 #' }
 #' where \code{exp_eta = exp(eta)} is the Cox proportional hazards multiplier.
 #'
 #' The simulation proceeds band-by-band. At the current attained age
-#' \code{current_age}, the baseline hazard \eqn{\lambda_0(a)} is obtained
+#' \code{current_age}, the baseline hazard \eqn{h_0(a)} is obtained
 #' from the age band containing that age. A waiting time is drawn from an
 #' exponential distribution with rate
-#' \code{\lambda_0(a) * exp_eta}. If the waiting time occurs before the end
+#' \code{h_0(a) * exp_eta}. If the waiting time occurs before the end
 #' of the current age band (or before \code{censor_age}), an event occurs.
 #' Otherwise the subject advances to the next band boundary and the procedure
 #' repeats until \code{censor_age}.
