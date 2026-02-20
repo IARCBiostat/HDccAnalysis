@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Survival data with a constant baseline hazard
+# Generate survival data with a constant baseline hazard
 
 We simulate 100 participants, all entering at age 50 and administratively censored at age 70. The baseline hazard is constant at 0.005, with a two covariates and log-hazard ratio 0.5.
 
