@@ -16,9 +16,8 @@ knitr::opts_chunk$set(
 )
 ```
 
-Here we provide vignettes for different ways for generating survival data using [HDccAnalysis::sim_cox_age_data()](reference/sim_cox_age_data.html):
+Here we provide vignettes for different ways for generating survival data using [HDccAnalysis::sim_cox_age_data()](../reference/sim_cox_age_data.html):
 
-- [Survival data with a constant baseline hazard](articles/Survival-data-with-a-constant-baseline-hazard.html)
-
+- [Survival data with a constant baseline hazard](survival-data-with-a-constant-baseline-hazard.html)
 
 
