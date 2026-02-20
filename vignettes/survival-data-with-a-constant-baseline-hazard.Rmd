@@ -74,7 +74,7 @@ attr(sim, "achieved_incidence_rate")
 # [1] 0.01163777
 ```
 
-## adjust the baselinehazard to aquire a target incidence rate
+## adjust the baseline hazard to acquire a target incidence rate
 
 We can rerun the previous simulation with the `target_avg_baseline_hazard` to obtain a required incidence rate. This feature is mainly used when you wish to vary beta but adjust teh baseline hazard to maintain the incidence rate:
 
