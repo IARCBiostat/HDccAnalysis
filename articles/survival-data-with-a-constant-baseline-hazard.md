@@ -1,0 +1,66 @@
+# Survival data with a constant baseline hazard
+
+``` r
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Generate survival data with a constant baseline hazard
+
+We simulate 100 participants, all entering at age 50 and
+administratively censored at age 70. The baseline hazard is constant at
+0.005, with a two covariates and log-hazard ratio 0.5.
+
+``` r
+set.seed(0)
+n <- 100
+entry_age <- 50
+censor_age <- 70
+beta <- c(0.5, 0.5)
+p <- length(beta)
+covariates <- matrix(rnorm(n * p), ncol = p)
+
+sim <- HDccAnalysis::sim_cox_age_data(
+  n = n,
+  entry_age = entry_age,
+  censor_age = censor_age,
+  beta = beta,
+  covariates = covariates,
+  baseline_hazard = 0.005
+)
+
+head(sim)
+# # A tibble: 6 × 6
+#      id entry_age censor_age event   Exp1    Exp2
+#   <int>     <dbl>      <dbl> <int>  <dbl>   <dbl>
+# 1     1        50         70     0  1.26   0.782 
+# 2     2        50         70     0 -0.326 -0.777 
+# 3     3        50         70     0  1.33  -0.616 
+# 4     4        50         70     0  1.27   0.0466
+# 5     5        50         70     0  0.415 -1.13  
+# 6     6        50         70     0 -1.54   0.577 
+```
+
+### Quick checks
+
+``` r
+fit <- survival::coxph(survival::Surv(entry_age, censor_age,event) ~ Exp1 + Exp2, data = sim)
+print(fit)
+# survival::coxph(formula = survival::Surv(entry_age, censor_age, 
+#     event) ~ Exp1 + Exp2, data = sim)
+
+#        coef exp(coef) se(coef)     z       p
+# Exp1 0.5133    1.6708   0.2475 2.074 0.03806
+# Exp2 0.6465    1.9088   0.2323 2.783 0.00539
+
+# Likelihood ratio test=13.06  on 2 df, p=0.001456
+# n= 100, number of events= 20 
+```
+
+### Next steps
+
+- Replace the constant hazard with `baseline_hazard_by_age` for
+  piecewise rates.
+- Tune `target_avg_baseline_hazard` to hit a desired marginal incidence.

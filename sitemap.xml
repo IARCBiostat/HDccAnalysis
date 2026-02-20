@@ -1,0 +1,18 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/404.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/LICENSE.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/articles/index.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/articles/simulating-data.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/articles/survival-data-with-a-constant-baseline-hazard.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/authors.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/index.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/dot-make_age_rate_tbl.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/dot-overlap_weight.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/dot-rate_and_band_at_age.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/dot-scale_to_avg_inc.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/dot-simulate_one.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/generate_age_rate_tbl.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/index.html</loc></url>
+<url><loc>https://IARCBiostat.github.io/HDccAnalysis/reference/sim_cox_age_data.html</loc></url>
+</urlset>
+
