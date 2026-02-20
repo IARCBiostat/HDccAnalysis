@@ -1,37 +1,49 @@
-High-Dimensional Case-Cohort Analysis tools in R.
+Statistical methods for analysing **case–cohort study designs** in
+**high-dimensional** settings.
 
-## Features
+HDccAnalysis supports: - **Typical designs**: all cases outside the
+subcohort are included - **Untypical designs**: only a subset of cases
+outside the subcohort are included - Multiple weighting schemes:
+**Prentice**, **Barlow**, and **Binder** - Tools for **evaluation** and
+**performance assessment** in reproducible workflows
 
-- Simulate attained-age survival data for Cox PH models with constant or
-  piecewise baseline hazards (`sim_cox_age_data`).
-- Scale baseline hazards to target incidence rates.
-- Utilities for case-cohort designs and weighting schemes (Prentice,
-  Barlow, Binder).
+------------------------------------------------------------------------
 
 ## Installation
 
 ``` r
-# From GitHub
 remotes::install_github("IARCBiostat/HDccAnalysis")
-
-# Or from a local checkout
-remotes::install_local(".", upgrade = "never")
 ```
+
+------------------------------------------------------------------------
+
+## Getting started
+
+### Simulate data
+
+Use
+[`HDccAnalysis::sim_cox_age_data()`](https://IARCBiostat.github.io/HDccAnalysis/reference/sim_cox_age_data.md)
+to simulate attained-age survival data under varying incidence rates.
+
+- Function reference:
+  [`sim_cox_age_data()`](https://IARCBiostat.github.io/HDccAnalysis/reference/sim_cox_age_data.md)
+  (pkgdown) `reference/sim_cox_age_data.html`
+- Vignette: **Simulating data** — walkthrough with a scalar baseline
+  hazard `articles/simulating-data.html`
+
+------------------------------------------------------------------------
 
 ## Documentation
 
-### Data simulations
+- **Reference index**: `reference/`
+- **Articles / vignettes**: `articles/`
 
-The
-[HDccAnalysis::sim_cox_age_data()](https://IARCBiostat.github.io/HDccAnalysis/reference/sim_cox_age_data.md)
-function can be used to simulate survival data with different incidence
-rates. You can follow these vignettes to simulate survival data:
+(If you have more key functions, add a small “Core functions” bullet
+list here.)
 
-- Vignette: [Simulating
-  data](https://IARCBiostat.github.io/HDccAnalysis/articles/simulating-data.md)
-  — walkthrough of data generation with a scalar baseline hazard.
-- Reference: function help pages generated from the `R/` source.
+------------------------------------------------------------------------
 
 ## Contributing
 
-Issues and pull requests are welcome at the GitHub repository.
+Bug reports and feature requests: open an **issue**. Code contributions:
+**pull requests** are welcome via GitHub.

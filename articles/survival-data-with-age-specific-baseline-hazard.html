@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Survival data with a constant baseline hazard • HDccAnalysis</title>
+<title>Survival data with age-specific baseline hazard • HDccAnalysis</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Survival data with a constant baseline hazard">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Survival data with age-specific baseline hazard">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -50,11 +50,11 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Survival data with a constant baseline hazard</h1>
+      <h1>Survival data with age-specific baseline hazard</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/IARCBiostat/HDccAnalysis/blob/main/vignettes/survival-data-with-a-constant-baseline-hazard.Rmd" class="external-link"><code>vignettes/survival-data-with-a-constant-baseline-hazard.Rmd</code></a></small>
-      <div class="d-none name"><code>survival-data-with-a-constant-baseline-hazard.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/IARCBiostat/HDccAnalysis/blob/main/vignettes/survival-data-with-age-specific-baseline-hazard.Rmd" class="external-link"><code>vignettes/survival-data-with-age-specific-baseline-hazard.Rmd</code></a></small>
+      <div class="d-none name"><code>survival-data-with-age-specific-baseline-hazard.Rmd</code></div>
     </div>
 
     
@@ -65,19 +65,29 @@
 <span>  comment <span class="op">=</span> <span class="st">"#&gt;"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="generate-survival-data-with-a-constant-baseline-hazard">Generate survival data with a constant baseline hazard<a class="anchor" aria-label="anchor" href="#generate-survival-data-with-a-constant-baseline-hazard"></a>
+<h2 id="generate-survival-data-with-a-piecewise-baseline-hazard">Generate survival data with a piecewise baseline hazard<a class="anchor" aria-label="anchor" href="#generate-survival-data-with-a-piecewise-baseline-hazard"></a>
 </h2>
-<p>We simulate 100 participants, all entering at age 50 and
-administratively censored at age 70. The baseline hazard is constant at
-0.005, with a two covariates and log-hazard ratio 0.5.</p>
+<p>We simulate 1000 participants entering at age 50 and administratively
+censored at age 70. However, the baseline hazard is
+piecewise-constant:</p>
+<ul>
+<li>ages [0, 60): 0.005</li>
+<li>ages [60, 100): 0.02</li>
+</ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
 <span><span class="va">entry_age</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span><span class="va">censor_age</span> <span class="op">&lt;-</span> <span class="fl">70</span></span>
-<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">0.6</span><span class="op">)</span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span></span>
 <span><span class="va">covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="va">p</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">baseline_hazard_by_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  age_lo <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span><span class="op">)</span>,</span>
+<span>  age_hi <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">60</span>, <span class="fl">100</span><span class="op">)</span>,</span>
+<span>  rate   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.005</span>, <span class="fl">0.02</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>
@@ -85,19 +95,19 @@ administratively censored at age 70. The baseline hazard is constant at
 <span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
 <span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
-<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.01</span></span>
+<span>  baseline_hazard_by_age <span class="op">=</span> <span class="va">baseline_hazard_by_age</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="co"># # A tibble: 6 × 6</span></span>
 <span><span class="co">#      id entry_age censor_age event   Exp1    Exp2</span></span>
 <span><span class="co">#   &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co"># 1     1        50       70       0  1.26  -0.287 </span></span>
-<span><span class="co"># 2     2        50       70       0 -0.326  1.84  </span></span>
-<span><span class="co"># 3     3        50       50.5     1  1.33  -0.157 </span></span>
-<span><span class="co"># 4     4        50       70       0  1.27  -1.39  </span></span>
-<span><span class="co"># 5     5        50       70       0  0.415 -1.47  </span></span>
-<span><span class="co"># 6     6        50       70       0 -1.54  -0.0695</span></span></code></pre></div>
+<span><span class="co"># 1     1        50       60.3     1 -0.626  1.13  </span></span>
+<span><span class="co"># 2     2        50       70       0  0.184  1.11  </span></span>
+<span><span class="co"># 3     3        50       70       0 -0.836 -0.871 </span></span>
+<span><span class="co"># 4     4        50       70       0  1.60   0.211 </span></span>
+<span><span class="co"># 5     5        50       70       0  0.330  0.0694</span></span>
+<span><span class="co"># 6     6        50       70       0 -0.820 -1.66  </span></span></code></pre></div>
 <div class="section level3">
 <h3 id="quick-checks">Quick checks<a class="anchor" aria-label="anchor" href="#quick-checks"></a>
 </h3>
@@ -109,33 +119,35 @@ administratively censored at age 70. The baseline hazard is constant at
 <span><span class="co">#     event) ~ Exp1 + Exp2, data = sim)</span></span>
 <span></span>
 <span><span class="co">#         coef exp(coef) se(coef)     z        p</span></span>
-<span><span class="co"># Exp1 0.50790   1.66180  0.06965 7.293 3.04e-13</span></span>
-<span><span class="co"># Exp2 0.61586   1.85124  0.06960 8.849  &lt; 2e-16</span></span>
+<span><span class="co"># Exp1 0.40820   1.50410  0.06268 6.512 7.41e-11</span></span>
+<span><span class="co"># Exp2 0.53256   1.70329  0.06039 8.818  &lt; 2e-16</span></span>
 <span></span>
-<span><span class="co"># Likelihood ratio test=128  on 2 df, p=&lt; 2.2e-16</span></span>
-<span><span class="co"># n= 1000, number of events= 207 </span></span></code></pre></div>
-<p>The achieved incidence rate is stored as an attribute (events /
-person-time):</p>
+<span><span class="co"># Likelihood ratio test=116.8  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 247 </span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="incidence-rate">Incidence rate<a class="anchor" aria-label="anchor" href="#incidence-rate"></a>
+</h3>
+<p>The achieved incidence rate (events per person-time):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.01163777</span></span></code></pre></div>
+<span><span class="co"># [1] 0.01367849</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="adjust-the-baseline-hazard-to-acquire-a-target-incidence-rate">adjust the baseline hazard to acquire a target incidence rate<a class="anchor" aria-label="anchor" href="#adjust-the-baseline-hazard-to-acquire-a-target-incidence-rate"></a>
 </h3>
-<p>We can rerun the previous simulation with the
-<code>target_avg_baseline_hazard</code> to obtain a required incidence
-rate. This feature is mainly used when you wish to vary beta but adjust
-teh baseline hazard to maintain the incidence rate:</p>
+<p>We can now run the simulation to achive a target inceidance rate
+while keeping the relevant hazard difference of the age groups using the
+<code>target_avg_baseline_hazard</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>
 <span>  entry_age <span class="op">=</span> <span class="va">entry_age</span>,</span>
 <span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
 <span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
-<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  baseline_hazard_by_age <span class="op">=</span> <span class="va">baseline_hazard_by_age</span>,</span>
 <span>  target_avg_baseline_hazard <span class="op">=</span> <span class="fl">0.02</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -145,14 +157,14 @@ teh baseline hazard to maintain the incidence rate:</p>
 <span><span class="co"># survival::coxph(formula = survival::Surv(entry_age, censor_age, </span></span>
 <span><span class="co">#     event) ~ Exp1 + Exp2, data = sim)</span></span>
 <span></span>
-<span><span class="co">#         coef exp(coef) se(coef)      z      p</span></span>
-<span><span class="co"># Exp1 0.53005   1.69902  0.05563  9.529 &lt;2e-16</span></span>
-<span><span class="co"># Exp2 0.57055   1.76924  0.05447 10.475 &lt;2e-16</span></span>
+<span><span class="co">#         coef exp(coef) se(coef)      z        p</span></span>
+<span><span class="co"># Exp1 0.40245   1.49549  0.05116  7.866 3.66e-15</span></span>
+<span><span class="co"># Exp2 0.57387   1.77512  0.05277 10.875  &lt; 2e-16</span></span>
 <span></span>
-<span><span class="co"># Likelihood ratio test=189.6  on 2 df, p=&lt; 2.2e-16</span></span>
-<span><span class="co"># n= 1000, number of events= 336 </span></span>
+<span><span class="co"># Likelihood ratio test=175  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 367 </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.02058137</span></span>
+<span><span class="co"># [1] 0.0212904</span></span>
 <span></span>
 <span><span class="va">beta_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="va">sim_2</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
@@ -161,7 +173,7 @@ teh baseline hazard to maintain the incidence rate:</p>
 <span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta_2</span>,</span>
 <span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
-<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  baseline_hazard_by_age <span class="op">=</span> <span class="va">baseline_hazard_by_age</span>,</span>
 <span>  target_avg_baseline_hazard <span class="op">=</span> <span class="fl">0.02</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -172,13 +184,13 @@ teh baseline hazard to maintain the incidence rate:</p>
 <span><span class="co">#     event) ~ Exp1 + Exp2, data = sim_2)</span></span>
 <span></span>
 <span><span class="co">#         coef exp(coef) se(coef)     z      p</span></span>
-<span><span class="co"># Exp1 1.47632   4.37679  0.07301 20.22 &lt;2e-16</span></span>
-<span><span class="co"># Exp2 1.46515   4.32819  0.07185 20.39 &lt;2e-16</span></span>
+<span><span class="co"># Exp1 1.47227   4.35912  0.06993 21.05 &lt;2e-16</span></span>
+<span><span class="co"># Exp2 1.38520   3.99564  0.07145 19.39 &lt;2e-16</span></span>
 <span></span>
-<span><span class="co"># Likelihood ratio test=739.5  on 2 df, p=&lt; 2.2e-16</span></span>
-<span><span class="co"># n= 1000, number of events= 323 </span></span>
+<span><span class="co"># Likelihood ratio test=726.9  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 349 </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim_2</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.02068137</span></span></code></pre></div>
+<span><span class="co"># [1] 0.02121945</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -1,4 +1,4 @@
-# Survival data with a constant baseline hazard
+# Survival data with age-specific baseline hazard
 
 ``` r
 knitr::opts_chunk$set(
@@ -7,20 +7,28 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Generate survival data with a constant baseline hazard
+## Generate survival data with a piecewise baseline hazard
 
-We simulate 100 participants, all entering at age 50 and
-administratively censored at age 70. The baseline hazard is constant at
-0.005, with a two covariates and log-hazard ratio 0.5.
+We simulate 1000 participants entering at age 50 and administratively
+censored at age 70. However, the baseline hazard is piecewise-constant:
+
+- ages \[0, 60): 0.005
+- ages \[60, 100): 0.02
 
 ``` r
-set.seed(0)
+set.seed(1)
 n <- 1000
 entry_age <- 50
 censor_age <- 70
-beta <- c(0.5, 0.5)
+beta <- c(0.4, 0.6)
 p <- length(beta)
 covariates <- matrix(rnorm(n * p), ncol = p)
+
+baseline_hazard_by_age <- data.frame(
+  age_lo = c(0, 60),
+  age_hi = c(60, 100),
+  rate   = c(0.005, 0.02)
+)
 
 sim <- HDccAnalysis::sim_cox_age_data(
   n = n,
@@ -28,19 +36,19 @@ sim <- HDccAnalysis::sim_cox_age_data(
   censor_age = censor_age,
   beta = beta,
   covariates = covariates,
-  baseline_hazard = 0.01
+  baseline_hazard_by_age = baseline_hazard_by_age
 )
 
 head(sim)
 # # A tibble: 6 × 6
 #      id entry_age censor_age event   Exp1    Exp2
 #   <int>     <dbl>      <dbl> <int>  <dbl>   <dbl>
-# 1     1        50       70       0  1.26  -0.287 
-# 2     2        50       70       0 -0.326  1.84  
-# 3     3        50       50.5     1  1.33  -0.157 
-# 4     4        50       70       0  1.27  -1.39  
-# 5     5        50       70       0  0.415 -1.47  
-# 6     6        50       70       0 -1.54  -0.0695
+# 1     1        50       60.3     1 -0.626  1.13  
+# 2     2        50       70       0  0.184  1.11  
+# 3     3        50       70       0 -0.836 -0.871 
+# 4     4        50       70       0  1.60   0.211 
+# 5     5        50       70       0  0.330  0.0694
+# 6     6        50       70       0 -0.820 -1.66  
 ```
 
 ### Quick checks
@@ -53,37 +61,37 @@ print(fit)
 #     event) ~ Exp1 + Exp2, data = sim)
 
 #         coef exp(coef) se(coef)     z        p
-# Exp1 0.50790   1.66180  0.06965 7.293 3.04e-13
-# Exp2 0.61586   1.85124  0.06960 8.849  < 2e-16
+# Exp1 0.40820   1.50410  0.06268 6.512 7.41e-11
+# Exp2 0.53256   1.70329  0.06039 8.818  < 2e-16
 
-# Likelihood ratio test=128  on 2 df, p=< 2.2e-16
-# n= 1000, number of events= 207 
+# Likelihood ratio test=116.8  on 2 df, p=< 2.2e-16
+# n= 1000, number of events= 247 
 ```
 
-The achieved incidence rate is stored as an attribute (events /
-person-time):
+### Incidence rate
+
+The achieved incidence rate (events per person-time):
 
 ``` r
 attr(sim, "achieved_incidence_rate")
-# [1] 0.01163777
+# [1] 0.01367849
 ```
 
 ### adjust the baseline hazard to acquire a target incidence rate
 
-We can rerun the previous simulation with the
-`target_avg_baseline_hazard` to obtain a required incidence rate. This
-feature is mainly used when you wish to vary beta but adjust teh
-baseline hazard to maintain the incidence rate:
+We can now run the simulation to achive a target inceidance rate while
+keeping the relevant hazard difference of the age groups using the
+`target_avg_baseline_hazard`:
 
 ``` r
-set.seed(0)
+set.seed(1)
 sim <- HDccAnalysis::sim_cox_age_data(
   n = n,
   entry_age = entry_age,
   censor_age = censor_age,
   beta = beta,
   covariates = covariates,
-  baseline_hazard = 0.01,
+  baseline_hazard_by_age = baseline_hazard_by_age,
   target_avg_baseline_hazard = 0.02
 )
 
@@ -93,14 +101,14 @@ print(fit)
 # survival::coxph(formula = survival::Surv(entry_age, censor_age, 
 #     event) ~ Exp1 + Exp2, data = sim)
 
-#         coef exp(coef) se(coef)      z      p
-# Exp1 0.53005   1.69902  0.05563  9.529 <2e-16
-# Exp2 0.57055   1.76924  0.05447 10.475 <2e-16
+#         coef exp(coef) se(coef)      z        p
+# Exp1 0.40245   1.49549  0.05116  7.866 3.66e-15
+# Exp2 0.57387   1.77512  0.05277 10.875  < 2e-16
 
-# Likelihood ratio test=189.6  on 2 df, p=< 2.2e-16
-# n= 1000, number of events= 336 
+# Likelihood ratio test=175  on 2 df, p=< 2.2e-16
+# n= 1000, number of events= 367 
 print(attr(sim, "achieved_incidence_rate"))
-# [1] 0.02058137
+# [1] 0.0212904
 
 beta_2 <- c(1.5, 1.5)
 sim_2 <- HDccAnalysis::sim_cox_age_data(
@@ -109,7 +117,7 @@ sim_2 <- HDccAnalysis::sim_cox_age_data(
   censor_age = censor_age,
   beta = beta_2,
   covariates = covariates,
-  baseline_hazard = 0.01,
+  baseline_hazard_by_age = baseline_hazard_by_age,
   target_avg_baseline_hazard = 0.02
 )
 
@@ -120,11 +128,11 @@ print(fit_2)
 #     event) ~ Exp1 + Exp2, data = sim_2)
 
 #         coef exp(coef) se(coef)     z      p
-# Exp1 1.47632   4.37679  0.07301 20.22 <2e-16
-# Exp2 1.46515   4.32819  0.07185 20.39 <2e-16
+# Exp1 1.47227   4.35912  0.06993 21.05 <2e-16
+# Exp2 1.38520   3.99564  0.07145 19.39 <2e-16
 
-# Likelihood ratio test=739.5  on 2 df, p=< 2.2e-16
-# n= 1000, number of events= 323 
+# Likelihood ratio test=726.9  on 2 df, p=< 2.2e-16
+# n= 1000, number of events= 349 
 print(attr(sim_2, "achieved_incidence_rate"))
-# [1] 0.02068137
+# [1] 0.02121945
 ```

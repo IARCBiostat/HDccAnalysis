@@ -48,43 +48,50 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 
-<p>High-Dimensional Case-Cohort Analysis tools in R.</p>
-<div class="section level2">
-<h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
-</h2>
-<ul>
-<li>Simulate attained-age survival data for Cox PH models with constant or piecewise baseline hazards (<code>sim_cox_age_data</code>).</li>
-<li>Scale baseline hazards to target incidence rates.</li>
-<li>Utilities for case-cohort designs and weighting schemes (Prentice, Barlow, Binder).</li>
-</ul>
-</div>
+<p>Statistical methods for analysing <strong>case–cohort study designs</strong> in <strong>high-dimensional</strong> settings.</p>
+<p>HDccAnalysis supports: - <strong>Typical designs</strong>: all cases outside the subcohort are included - <strong>Untypical designs</strong>: only a subset of cases outside the subcohort are included - Multiple weighting schemes: <strong>Prentice</strong>, <strong>Barlow</strong>, and <strong>Binder</strong> - Tools for <strong>evaluation</strong> and <strong>performance assessment</strong> in reproducible workflows</p>
+<hr>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># From GitHub</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"IARCBiostat/HDccAnalysis"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Or from a local checkout</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_local</span><span class="op">(</span><span class="st">"."</span>, upgrade <span class="op">=</span> <span class="st">"never"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"IARCBiostat/HDccAnalysis"</span><span class="op">)</span></span></code></pre></div>
+<hr>
+</div>
+<div class="section level2">
+<h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+</h2>
+<div class="section level3">
+<h3 id="simulate-data">Simulate data<a class="anchor" aria-label="anchor" href="#simulate-data"></a>
+</h3>
+<p>Use <code><a href="reference/sim_cox_age_data.html">HDccAnalysis::sim_cox_age_data()</a></code> to simulate attained-age survival data under varying incidence rates.</p>
+<ul>
+<li>Function reference: <code><a href="reference/sim_cox_age_data.html">sim_cox_age_data()</a></code> (pkgdown) <code>reference/sim_cox_age_data.html</code>
+</li>
+<li>Vignette: <strong>Simulating data</strong> — walkthrough with a scalar baseline hazard <code>articles/simulating-data.html</code>
+</li>
+</ul>
+<hr>
+</div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<div class="section level3">
-<h3 id="data-simulations">Data simulations<a class="anchor" aria-label="anchor" href="#data-simulations"></a>
-</h3>
-<p>The <a href="reference/sim_cox_age_data.html">HDccAnalysis::sim_cox_age_data()</a> function can be used to simulate survival data with different incidence rates. You can follow these vignettes to simulate survival data:</p>
 <ul>
-<li>Vignette: <a href="articles/simulating-data.html">Simulating data</a> — walkthrough of data generation with a scalar baseline hazard.</li>
-<li>Reference: function help pages generated from the <code>R/</code> source.</li>
+<li>
+<strong>Reference index</strong>: <code>reference/</code>
+</li>
+<li>
+<strong>Articles / vignettes</strong>: <code>articles/</code>
+</li>
 </ul>
-</div>
+<p>(If you have more key functions, add a small “Core functions” bullet list here.)</p>
+<hr>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
 </h2>
-<p>Issues and pull requests are welcome at the GitHub repository.</p>
+<p>Bug reports and feature requests: open an <strong>issue</strong>. Code contributions: <strong>pull requests</strong> are welcome via GitHub.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
