@@ -8,6 +8,7 @@ home:
   title: HDccAnalysis
   tagline: High-Dimensional Case-Cohort Analysis tools
   strip_header: true
+  md: pkgdown/index.md
 
 reference:
   - title: Simulation
@@ -22,3 +23,4 @@ articles:
     contents:
       - simulating-data
       - survival-data-with-a-constant-baseline-hazard
+      - survival-data-with-age-specific-baseline-hazard
