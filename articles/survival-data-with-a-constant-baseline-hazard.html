@@ -72,7 +72,7 @@ administratively censored at age 70. The baseline hazard is constant at
 0.005, with a two covariates and log-hazard ratio 0.5.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
 <span><span class="va">entry_age</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
 <span><span class="va">censor_age</span> <span class="op">&lt;-</span> <span class="fl">70</span></span>
 <span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span></span>
@@ -85,44 +85,100 @@ administratively censored at age 70. The baseline hazard is constant at
 <span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
 <span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
 <span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
-<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.005</span></span>
+<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.01</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
 <span><span class="co"># # A tibble: 6 × 6</span></span>
 <span><span class="co">#      id entry_age censor_age event   Exp1    Exp2</span></span>
 <span><span class="co">#   &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span><span class="co"># 1     1        50         70     0  1.26   0.782 </span></span>
-<span><span class="co"># 2     2        50         70     0 -0.326 -0.777 </span></span>
-<span><span class="co"># 3     3        50         70     0  1.33  -0.616 </span></span>
-<span><span class="co"># 4     4        50         70     0  1.27   0.0466</span></span>
-<span><span class="co"># 5     5        50         70     0  0.415 -1.13  </span></span>
-<span><span class="co"># 6     6        50         70     0 -1.54   0.577 </span></span></code></pre></div>
+<span><span class="co"># 1     1        50       70       0  1.26  -0.287 </span></span>
+<span><span class="co"># 2     2        50       70       0 -0.326  1.84  </span></span>
+<span><span class="co"># 3     3        50       50.5     1  1.33  -0.157 </span></span>
+<span><span class="co"># 4     4        50       70       0  1.27  -1.39  </span></span>
+<span><span class="co"># 5     5        50       70       0  0.415 -1.47  </span></span>
+<span><span class="co"># 6     6        50       70       0 -1.54  -0.0695</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="quick-checks">Quick checks<a class="anchor" aria-label="anchor" href="#quick-checks"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">entry_age</span>, <span class="va">censor_age</span>,<span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">Exp1</span> <span class="op">+</span> <span class="va">Exp2</span>, data <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co"># Call:</span></span>
 <span><span class="co"># survival::coxph(formula = survival::Surv(entry_age, censor_age, </span></span>
 <span><span class="co">#     event) ~ Exp1 + Exp2, data = sim)</span></span>
 <span></span>
-<span><span class="co">#        coef exp(coef) se(coef)     z       p</span></span>
-<span><span class="co"># Exp1 0.5133    1.6708   0.2475 2.074 0.03806</span></span>
-<span><span class="co"># Exp2 0.6465    1.9088   0.2323 2.783 0.00539</span></span>
+<span><span class="co">#         coef exp(coef) se(coef)     z        p</span></span>
+<span><span class="co"># Exp1 0.50790   1.66180  0.06965 7.293 3.04e-13</span></span>
+<span><span class="co"># Exp2 0.61586   1.85124  0.06960 8.849  &lt; 2e-16</span></span>
 <span></span>
-<span><span class="co"># Likelihood ratio test=13.06  on 2 df, p=0.001456</span></span>
-<span><span class="co"># n= 100, number of events= 20 </span></span></code></pre></div>
+<span><span class="co"># Likelihood ratio test=128  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 207 </span></span></code></pre></div>
+<p>The achieved incidence rate is stored as an attribute (events /
+person-time):</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span></span>
+<span><span class="co"># [1] 0.01163777</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
+<h3 id="adjust-the-baselinehazard-to-aquire-a-target-incidence-rate">adjust the baselinehazard to aquire a target incidence rate<a class="anchor" aria-label="anchor" href="#adjust-the-baselinehazard-to-aquire-a-target-incidence-rate"></a>
 </h3>
-<ul>
-<li>Replace the constant hazard with <code>baseline_hazard_by_age</code>
-for piecewise rates.</li>
-<li>Tune <code>target_avg_baseline_hazard</code> to hit a desired
-marginal incidence.</li>
-</ul>
+<p>We can rerun the previous simulation with the
+<code>target_avg_baseline_hazard</code> to obtain a required incidence
+rate. This feature is mainly used when you wish to vary beta but adjust
+teh baseline hazard to maintain the incidence rate:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="va">n</span>,</span>
+<span>  entry_age <span class="op">=</span> <span class="va">entry_age</span>,</span>
+<span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
+<span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
+<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  target_avg_baseline_hazard <span class="op">=</span> <span class="fl">0.02</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">entry_age</span>, <span class="va">censor_age</span>,<span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">Exp1</span> <span class="op">+</span> <span class="va">Exp2</span>, data <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co"># Call:</span></span>
+<span><span class="co"># survival::coxph(formula = survival::Surv(entry_age, censor_age, </span></span>
+<span><span class="co">#     event) ~ Exp1 + Exp2, data = sim)</span></span>
+<span></span>
+<span><span class="co">#         coef exp(coef) se(coef)      z      p</span></span>
+<span><span class="co"># Exp1 0.53005   1.69902  0.05563  9.529 &lt;2e-16</span></span>
+<span><span class="co"># Exp2 0.57055   1.76924  0.05447 10.475 &lt;2e-16</span></span>
+<span></span>
+<span><span class="co"># Likelihood ratio test=189.6  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 336 </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># [1] 0.02058137</span></span>
+<span></span>
+<span><span class="va">beta_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span></span>
+<span><span class="va">sim_2</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="va">n</span>,</span>
+<span>  entry_age <span class="op">=</span> <span class="va">entry_age</span>,</span>
+<span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
+<span>  beta <span class="op">=</span> <span class="va">beta_2</span>,</span>
+<span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
+<span>  baseline_hazard <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  target_avg_baseline_hazard <span class="op">=</span> <span class="fl">0.02</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit_2</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">entry_age</span>, <span class="va">censor_age</span>,<span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">Exp1</span> <span class="op">+</span> <span class="va">Exp2</span>, data <span class="op">=</span> <span class="va">sim_2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit_2</span><span class="op">)</span></span>
+<span><span class="co"># Call:</span></span>
+<span><span class="co"># survival::coxph(formula = survival::Surv(entry_age, censor_age, </span></span>
+<span><span class="co">#     event) ~ Exp1 + Exp2, data = sim_2)</span></span>
+<span></span>
+<span><span class="co">#         coef exp(coef) se(coef)     z      p</span></span>
+<span><span class="co"># Exp1 1.47632   4.37679  0.07301 20.22 &lt;2e-16</span></span>
+<span><span class="co"># Exp2 1.46515   4.32819  0.07185 20.39 &lt;2e-16</span></span>
+<span></span>
+<span><span class="co"># Likelihood ratio test=739.5  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 323 </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim_2</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># [1] 0.02068137</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
