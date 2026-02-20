@@ -8,6 +8,9 @@ Barlow, and Binder.
 The package is designed to facilitate efficient and reproducible analysis of
 high-dimensional survival data arising from case–cohort sampling frameworks.
 
+
+[Please visit out website for more information and vignettes](https://iarcbiostat.github.io/HDccAnalysis/index.html)
+
 ## Installation
 
 You can install the development version from GitHub:

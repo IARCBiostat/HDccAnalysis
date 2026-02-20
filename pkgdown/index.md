@@ -3,6 +3,7 @@
 Statistical methods for analysing **case–cohort study designs** in **high-dimensional** settings.
 
 HDccAnalysis supports:
+
 - **Typical designs**: all cases outside the subcohort are included
 - **Untypical designs**: only a subset of cases outside the subcohort are included
 - Multiple weighting schemes: **Prentice**, **Barlow**, and **Binder**
@@ -22,12 +23,7 @@ remotes::install_github("IARCBiostat/HDccAnalysis")
 
 ### Simulate data
 
-Use `HDccAnalysis::sim_cox_age_data()` to simulate attained-age survival data under varying incidence rates.
-
-* Function reference: `sim_cox_age_data()` (pkgdown)
-  `reference/sim_cox_age_data.html`
-* Vignette: **Simulating data** — walkthrough with a scalar baseline hazard
-  `articles/simulating-data.html`
+Use [HDccAnalysis::sim_cox_age_data()](reference/sim_cox_age_data.html) to simulate attained-age survival data under varying incidence rates. You will find the examples in the [Simulating data](articles/simulating-data.html)
 
 ---
 
