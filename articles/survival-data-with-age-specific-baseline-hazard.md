@@ -66,7 +66,7 @@ print(fit)
 The achieved incidence rate (events per person-time):
 
 ``` r
-attr(sim, "achieved_incidence_rate")
+print(attr(sim, "achieved_incidence_rate"))
 # [1] 0.01367849
 ```
 
@@ -94,14 +94,14 @@ print(fit)
 # survival::coxph(formula = survival::Surv(entry_age, censor_age, 
 #     event) ~ Exp1 + Exp2, data = sim)
 
-#         coef exp(coef) se(coef)      z        p
-# Exp1 0.40245   1.49549  0.05116  7.866 3.66e-15
-# Exp2 0.57387   1.77512  0.05277 10.875  < 2e-16
+#         coef exp(coef) se(coef)     z        p
+# Exp1 0.40482   1.49903  0.05459 7.415 1.21e-13
+# Exp2 0.49940   1.64774  0.05532 9.027  < 2e-16
 
-# Likelihood ratio test=175  on 2 df, p=< 2.2e-16
-# n= 1000, number of events= 367 
+# Likelihood ratio test=130.8  on 2 df, p=< 2.2e-16
+# n= 1000, number of events= 325 
 print(attr(sim, "achieved_incidence_rate"))
-# [1] 0.0212904
+# [1] 0.0187728
 
 beta_2 <- c(1.5, 1.5)
 sim_2 <- HDccAnalysis::sim_cox_age_data(
@@ -121,11 +121,11 @@ print(fit_2)
 #     event) ~ Exp1 + Exp2, data = sim_2)
 
 #         coef exp(coef) se(coef)     z      p
-# Exp1 1.47227   4.35912  0.06993 21.05 <2e-16
-# Exp2 1.38520   3.99564  0.07145 19.39 <2e-16
+# Exp1 1.47836   4.38573  0.07176 20.60 <2e-16
+# Exp2 1.48883   4.43190  0.07324 20.33 <2e-16
 
-# Likelihood ratio test=726.9  on 2 df, p=< 2.2e-16
-# n= 1000, number of events= 349 
+# Likelihood ratio test=737.9  on 2 df, p=< 2.2e-16
+# n= 1000, number of events= 320 
 print(attr(sim_2, "achieved_incidence_rate"))
-# [1] 0.02121945
+# [1] 0.01927724
 ```

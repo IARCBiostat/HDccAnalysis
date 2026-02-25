@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">HDccAnalysis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,7 +125,7 @@ piecewise-constant:</p>
 </h3>
 <p>The achieved incidence rate (events per person-time):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># [1] 0.01367849</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -152,14 +152,14 @@ while keeping the relevant hazard difference of the age groups using the
 <span><span class="co"># survival::coxph(formula = survival::Surv(entry_age, censor_age, </span></span>
 <span><span class="co">#     event) ~ Exp1 + Exp2, data = sim)</span></span>
 <span></span>
-<span><span class="co">#         coef exp(coef) se(coef)      z        p</span></span>
-<span><span class="co"># Exp1 0.40245   1.49549  0.05116  7.866 3.66e-15</span></span>
-<span><span class="co"># Exp2 0.57387   1.77512  0.05277 10.875  &lt; 2e-16</span></span>
+<span><span class="co">#         coef exp(coef) se(coef)     z        p</span></span>
+<span><span class="co"># Exp1 0.40482   1.49903  0.05459 7.415 1.21e-13</span></span>
+<span><span class="co"># Exp2 0.49940   1.64774  0.05532 9.027  &lt; 2e-16</span></span>
 <span></span>
-<span><span class="co"># Likelihood ratio test=175  on 2 df, p=&lt; 2.2e-16</span></span>
-<span><span class="co"># n= 1000, number of events= 367 </span></span>
+<span><span class="co"># Likelihood ratio test=130.8  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 325 </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.0212904</span></span>
+<span><span class="co"># [1] 0.0187728</span></span>
 <span></span>
 <span><span class="va">beta_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span></span>
 <span><span class="va">sim_2</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
@@ -179,13 +179,13 @@ while keeping the relevant hazard difference of the age groups using the
 <span><span class="co">#     event) ~ Exp1 + Exp2, data = sim_2)</span></span>
 <span></span>
 <span><span class="co">#         coef exp(coef) se(coef)     z      p</span></span>
-<span><span class="co"># Exp1 1.47227   4.35912  0.06993 21.05 &lt;2e-16</span></span>
-<span><span class="co"># Exp2 1.38520   3.99564  0.07145 19.39 &lt;2e-16</span></span>
+<span><span class="co"># Exp1 1.47836   4.38573  0.07176 20.60 &lt;2e-16</span></span>
+<span><span class="co"># Exp2 1.48883   4.43190  0.07324 20.33 &lt;2e-16</span></span>
 <span></span>
-<span><span class="co"># Likelihood ratio test=726.9  on 2 df, p=&lt; 2.2e-16</span></span>
-<span><span class="co"># n= 1000, number of events= 349 </span></span>
+<span><span class="co"># Likelihood ratio test=737.9  on 2 df, p=&lt; 2.2e-16</span></span>
+<span><span class="co"># n= 1000, number of events= 320 </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim_2</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># [1] 0.02121945</span></span></code></pre></div>
+<span><span class="co"># [1] 0.01927724</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
