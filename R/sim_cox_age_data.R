@@ -66,7 +66,7 @@ sim_cox_age_data <- function(n,
     }
 
     time <- age_exit - entry_age
-    colnames(x) <- if (is.null(colnames(x))) paste0("Exp", seq_len(p)) else colnames(x)
+    colnames(x) <- if (is.null(colnames(covariates))) paste0("Exp", seq_len(p)) else colnames(covariates)
 
     out <- data.frame(
         id = seq_len(n),
