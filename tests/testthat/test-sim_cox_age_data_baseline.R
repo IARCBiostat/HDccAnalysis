@@ -35,6 +35,23 @@ test_that("sim_cox_age_data simulates with a constant baseline hazard", {
   )
 })
 
+test_that("sim_cox_age_data preserves covariate column names", {
+  set.seed(321)
+  covs <- matrix(c(0, 1, 1, 0), nrow = 2, byrow = TRUE)
+  colnames(covs) <- c("smoking", "bmi_cat")
+
+  out <- sim_cox_age_data(
+    n = 2,
+    entry_age = c(40, 41),
+    censor_age = c(45, 46),
+    beta = c(0.2, -0.1),
+    covariates = covs,
+    baseline_hazard = 0.05
+  )
+
+  expect_equal(colnames(out), c("id", "entry_age", "censor_age", "event", "smoking", "bmi_cat"))
+})
+
 test_that("scalar ages recycle to length n", {
   set.seed(99)
   out <- sim_cox_age_data(
