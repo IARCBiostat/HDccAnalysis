@@ -47,7 +47,6 @@ sim_cox_age_data <- function(n,
     exp_eta <- exp(as.numeric(x %*% beta))
 
     tbl <- .make_age_rate_tbl(baseline_hazard_by_age, baseline_hazard)
-    # tbl <- .scale_to_avg_inc(tbl, age_in, age_out, avg_inc_rate)
     tbl <- .scale_to_avg_inc(tbl, entry_age, censor_age, target_avg_baseline_hazard, exp_eta)
     lookup_table <- list(lo = tbl$age_lo, hi = tbl$age_hi, rate = tbl$rate)
 
