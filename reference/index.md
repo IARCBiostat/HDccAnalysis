@@ -18,7 +18,9 @@
 - [`.simulate_one()`](https://IARCBiostat.github.io/HDccAnalysis/reference/dot-simulate_one.md)
   : Simulate a single subject's event time under piecewise-constant
   hazard
-- [`generate_age_rate_tbl()`](https://IARCBiostat.github.io/HDccAnalysis/reference/generate_age_rate_tbl.md)
-  : Reformat age-group incidence data into an age-rate lookup table
+- [`france_2008_incidence_rates`](https://IARCBiostat.github.io/HDccAnalysis/reference/france_2008_incidence_rates.md)
+  : Age-specific cancer incidence rates for males and females in France
+  in 2008, extracted and processed from publicly available Santé
+  publique France (SPF) cancer surveillance data.
 - [`sim_cox_age_data()`](https://IARCBiostat.github.io/HDccAnalysis/reference/sim_cox_age_data.md)
   : Simulate attained-age survival data under a Cox PH model

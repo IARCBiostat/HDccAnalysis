@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">HDccAnalysis</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,12 +129,95 @@ piecewise-constant:</p>
 <span><span class="co"># [1] 0.01367849</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="french-2008-cancer-incidence-rates-table">French 2008 cancer incidence rates table<a class="anchor" aria-label="anchor" href="#french-2008-cancer-incidence-rates-table"></a>
+</h3>
+<p>We have processed the 2008 French cancer incidence and survival
+estimates (available from the Santé publique France (SPF) repository: <a href="http://invs.santepubliquefrance.fr/Dossiers-thematiques/Maladies-chroniques-et-traumatismes/Cancers/Surveillance-epidemiologique-des-cancers/Estimations-de-l-incidence-de-la-mortalite-et-de-la-survie-stade-au-diagnostic" class="external-link">http://invs.santepubliquefrance.fr/Dossiers-thematiques/Maladies-chroniques-et-traumatismes/Cancers/Surveillance-epidemiologique-des-cancers/Estimations-de-l-incidence-de-la-mortalite-et-de-la-survie-stade-au-diagnostic</a>)
+and extracted age-specific incidence rates for males and females for 15
+cacner sites. This processed table is distributed with the package to
+provide users with a quick starting point for more realistic simulation
+studies, without requiring any additional data preparation.</p>
+<p>As an example, we will load the table and simulate data using
+incidence rates corresponding to females with colon and rectum
+cancer:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">entry_age</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span><span class="va">censor_age</span> <span class="op">&lt;-</span> <span class="fl">70</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">0.6</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">beta</span><span class="op">)</span></span>
+<span><span class="va">covariates</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="va">p</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="va">p</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">covariates</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"xx1"</span>, <span class="st">"xx2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"france_2008_incidence_rates"</span>, package <span class="op">=</span> <span class="st">"HDccAnalysis"</span><span class="op">)</span></span></code></pre></div>
+<p>For detailed information on the data you can use the
+<code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code> function:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/help.html" class="external-link">help</a></span><span class="op">(</span><span class="va">france_2008_incidence_rates</span><span class="op">)</span></span></code></pre></div>
+<p>We will now extract the subgroup of interest and start generate
+data:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">baseline_hazard_females_colorectum</span> <span class="op">&lt;-</span> <span class="va">france_2008_incidence_rates</span><span class="op">[</span></span>
+<span>  <span class="va">france_2008_incidence_rates</span><span class="op">$</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"female"</span> <span class="op">&amp;</span> <span class="va">france_2008_incidence_rates</span><span class="op">$</span><span class="va">site</span> <span class="op">==</span> <span class="st">"colon_rectum"</span>,</span>
+<span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
+<span>  n <span class="op">=</span> <span class="va">n</span>,</span>
+<span>  entry_age <span class="op">=</span> <span class="va">entry_age</span>,</span>
+<span>  censor_age <span class="op">=</span> <span class="va">censor_age</span>,</span>
+<span>  beta <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>  covariates <span class="op">=</span> <span class="va">covariates</span>,</span>
+<span>  baseline_hazard_by_age <span class="op">=</span> <span class="va">baseline_hazard_females_colorectum</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
+<span><span class="co"># # A tibble: 6 × 6</span></span>
+<span><span class="co">#      id entry_age censor_age event    xx1     xx2</span></span>
+<span><span class="co">#   &lt;int&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span><span class="co"># 1     1        50         70     0 -0.626  1.13</span></span>
+<span><span class="co"># 2     2        50         70     0  0.184  1.11</span></span>
+<span><span class="co"># 3     3        50         70     0 -0.836 -0.871</span></span>
+<span><span class="co"># 4     4        50         70     0  1.60   0.211</span></span>
+<span><span class="co"># 5     5        50         70     0  0.330  0.0694</span></span>
+<span><span class="co"># 6     6        50         70     0 -0.820 -1.66</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="quick-checks-1">Quick checks<a class="anchor" aria-label="anchor" href="#quick-checks-1"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span></span>
+<span>  <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">entry_age</span>, <span class="va">censor_age</span>, <span class="va">event</span><span class="op">)</span> <span class="op">~</span> <span class="va">Exp1</span> <span class="op">+</span> <span class="va">Exp2</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">sim</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span>
+<span><span class="co"># Call:</span></span>
+<span><span class="co"># survival::coxph(formula = survival::Surv(entry_age, censor_age,</span></span>
+<span><span class="co">#     event) ~ xx1 + xx2, data = sim)</span></span>
+<span></span>
+<span><span class="co">#       coef exp(coef) se(coef)    z        p</span></span>
+<span><span class="co"># xx1 0.6904    1.9945   0.2013 3.43 0.000604</span></span>
+<span><span class="co"># xx2 0.2948    1.3428   0.1992 1.48 0.138991</span></span>
+<span></span>
+<span><span class="co"># Likelihood ratio test=14.17  on 2 df, p=0.0008386</span></span>
+<span><span class="co"># n= 1000, number of events= 22</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="incidence-rate-1">Incidence rate<a class="anchor" aria-label="anchor" href="#incidence-rate-1"></a>
+</h3>
+<p>The achieved incidence rate (events per person-time):</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"achieved_incidence_rate"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># [1] 0.00110632</span></span></code></pre></div>
+</div>
+<div class="section level3">
 <h3 id="adjust-the-baseline-hazard-to-acquire-a-target-incidence-rate">adjust the baseline hazard to acquire a target incidence rate<a class="anchor" aria-label="anchor" href="#adjust-the-baseline-hazard-to-acquire-a-target-incidence-rate"></a>
 </h3>
 <p>We can now run the simulation to achive a target inceidance rate
 while keeping the relevant hazard difference of the age groups using the
 <code>target_avg_baseline_hazard</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu">HDccAnalysis</span><span class="fu">::</span><span class="fu"><a href="../reference/sim_cox_age_data.html">sim_cox_age_data</a></span><span class="op">(</span></span>
 <span>  n <span class="op">=</span> <span class="va">n</span>,</span>
