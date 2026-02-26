@@ -87,6 +87,90 @@ print(attr(sim, "achieved_incidence_rate"))
 # [1] 0.01367849
 ```
 
+## French 2008 cancer incidence rates table
+
+We have processed the 2008 French cancer incidence and survival estimates 
+(available from the Santé publique France (SPF) repository: [http://invs.santepubliquefrance.fr/Dossiers-thematiques/Maladies-chroniques-et-traumatismes/Cancers/Surveillance-epidemiologique-des-cancers/Estimations-de-l-incidence-de-la-mortalite-et-de-la-survie-stade-au-diagnostic](http://invs.santepubliquefrance.fr/Dossiers-thematiques/Maladies-chroniques-et-traumatismes/Cancers/Surveillance-epidemiologique-des-cancers/Estimations-de-l-incidence-de-la-mortalite-et-de-la-survie-stade-au-diagnostic))
+ and extracted age-specific incidence rates for males and females for 15 cacner sites. This processed table is distributed with the package to provide users with a quick starting point for more realistic simulation studies, without requiring any additional data preparation. 
+
+As an example, we will load the table and simulate data using incidence rates corresponding to females with colon and rectum cancer:
+
+```r
+set.seed(1)
+
+n <- 1000
+entry_age <- 50
+censor_age <- 70
+beta <- c(0.4, 0.6)
+p <- length(beta)
+covariates <- matrix(rnorm(n * p), ncol = p)
+colnames(covariates) <- c("xx1", "xx2")
+
+data("france_2008_incidence_rates", package = "HDccAnalysis")
+```
+
+For detailed information on the data you can use the `help()` function:
+```r
+help(france_2008_incidence_rates)
+```
+
+We will now extract the subgroup of interest and start generate data:
+
+```r
+baseline_hazard_females_colorectum <- france_2008_incidence_rates[
+  france_2008_incidence_rates$sex == "female" & france_2008_incidence_rates$site == "colon_rectum",
+]
+
+sim <- HDccAnalysis::sim_cox_age_data(
+  n = n,
+  entry_age = entry_age,
+  censor_age = censor_age,
+  beta = beta,
+  covariates = covariates,
+  baseline_hazard_by_age = baseline_hazard_females_colorectum
+)
+
+head(sim)
+# # A tibble: 6 × 6
+#      id entry_age censor_age event    xx1     xx2
+#   <int>     <dbl>      <dbl> <int>  <dbl>   <dbl>
+# 1     1        50         70     0 -0.626  1.13
+# 2     2        50         70     0  0.184  1.11
+# 3     3        50         70     0 -0.836 -0.871
+# 4     4        50         70     0  1.60   0.211
+# 5     5        50         70     0  0.330  0.0694
+# 6     6        50         70     0 -0.820 -1.66
+```
+
+## Quick checks
+
+```r
+fit <- survival::coxph(
+  survival::Surv(entry_age, censor_age, event) ~ Exp1 + Exp2,
+  data = sim
+)
+print(fit)
+# Call:
+# survival::coxph(formula = survival::Surv(entry_age, censor_age,
+#     event) ~ xx1 + xx2, data = sim)
+
+#       coef exp(coef) se(coef)    z        p
+# xx1 0.6904    1.9945   0.2013 3.43 0.000604
+# xx2 0.2948    1.3428   0.1992 1.48 0.138991
+
+# Likelihood ratio test=14.17  on 2 df, p=0.0008386
+# n= 1000, number of events= 22
+```
+
+## Incidence rate
+
+The achieved incidence rate (events per person-time):
+
+```r
+print(attr(sim, "achieved_incidence_rate"))
+# [1] 0.00110632
+```
+
 ## adjust the baseline hazard to acquire a target incidence rate
 
 We can now run the simulation to achive a target inceidance rate while keeping the relevant hazard difference of the age groups using the `target_avg_baseline_hazard`:
